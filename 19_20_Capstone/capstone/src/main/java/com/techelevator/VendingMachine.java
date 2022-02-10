@@ -20,24 +20,24 @@ public class VendingMachine {
                 while (fileScanner.hasNextLine()) {
                     String line = fileScanner.nextLine();
                     String[] lineArray = line.split("\\|");
-                        if (lineArray[3].equalsIgnoreCase("Chip")) {
-                           // String chipName = lineArray[1];
-                            BigDecimal chipPrice = new BigDecimal(lineArray[2]);
-                            Chip chip = new Chip(lineArray[1], chipPrice);
-                            inventoryMap.put(lineArray[0], chip);
-                        } else if (lineArray[3].equalsIgnoreCase("Drink")) {
-                            BigDecimal drinkPrice = new BigDecimal(lineArray[2]);
-                            Drink drink = new Drink(lineArray[1], drinkPrice);
-                            inventoryMap.put(lineArray[0], drink);
-                        } else if (lineArray[3].equalsIgnoreCase("Candy")) {
-                            BigDecimal candyPrice = new BigDecimal(lineArray[2]);
-                            Candy candy = new Candy(lineArray[1], candyPrice);
-                            inventoryMap.put(lineArray[0], candy);
-                        } else if (lineArray[3].equalsIgnoreCase("Gum")) {
-                            BigDecimal gumPrice = new BigDecimal(lineArray[2]);
-                            Gum gum = new Gum(lineArray[1], gumPrice);
-                            inventoryMap.put(lineArray[0], gum);
-                        }
+                    if (lineArray[3].equalsIgnoreCase("Chip")) {
+                        // String chipName = lineArray[1];
+                        BigDecimal chipPrice = new BigDecimal(lineArray[2]);
+                        Chip chip = new Chip(lineArray[1], chipPrice);
+                        inventoryMap.put(lineArray[0], chip);
+                    } else if (lineArray[3].equalsIgnoreCase("Drink")) {
+                        BigDecimal drinkPrice = new BigDecimal(lineArray[2]);
+                        Drink drink = new Drink(lineArray[1], drinkPrice);
+                        inventoryMap.put(lineArray[0], drink);
+                    } else if (lineArray[3].equalsIgnoreCase("Candy")) {
+                        BigDecimal candyPrice = new BigDecimal(lineArray[2]);
+                        Candy candy = new Candy(lineArray[1], candyPrice);
+                        inventoryMap.put(lineArray[0], candy);
+                    } else if (lineArray[3].equalsIgnoreCase("Gum")) {
+                        BigDecimal gumPrice = new BigDecimal(lineArray[2]);
+                        Gum gum = new Gum(lineArray[1], gumPrice);
+                        inventoryMap.put(lineArray[0], gum);
+                    }
                 }
             } catch (FileNotFoundException ex) {
                 System.out.println("Vending.txt File Not Found");
@@ -57,12 +57,11 @@ public class VendingMachine {
     // methods
     public BigDecimal feedMoney(int moneyAdded) {
         balance = balance.add(BigDecimal.valueOf(moneyAdded));
+        System.out.println("Your remaining balance is $" + balance + ".");
         return balance;
     }
+
     public void selectProduct(String key) {
-        if (balance.equals(0.00)) {
-            System.out.println("Please deposit money before making a selection.");
-        }
         if (inventoryMap.get(key).getNumberRemaining() > 0 && (balance.compareTo(inventoryMap.get(key).getPrice())) >= 0) {
             balance = balance.subtract(inventoryMap.get(key).getPrice());
             System.out.println(inventoryMap.get(key).purchased());
@@ -73,6 +72,7 @@ public class VendingMachine {
         } else if (balance.compareTo(inventoryMap.get(key).getPrice()) < 0) {
             System.out.println("Please Add Additional Funds");
         }
+        System.out.println("Your remaining balance is $" + balance + " .");
     }
 
     public void finishTransaction() {
@@ -83,13 +83,13 @@ public class VendingMachine {
 
         while (balance.compareTo(BigDecimal.ZERO) > 0) {
             if (balance.compareTo(BigDecimal.valueOf(0.25)) >= 0) {
-                quarter ++;
-               balance = balance.subtract(BigDecimal.valueOf(0.25));
+                quarter++;
+                balance = balance.subtract(BigDecimal.valueOf(0.25));
             } else if (balance.compareTo(BigDecimal.valueOf(0.10)) >= 0) {
-                dime ++;
+                dime++;
                 balance = balance.subtract(BigDecimal.valueOf(0.10));
             } else if (balance.compareTo(BigDecimal.valueOf(0.05)) >= 0) {
-                nickle ++;
+                nickle++;
                 balance = balance.subtract(BigDecimal.valueOf(0.05));
             }
         }
