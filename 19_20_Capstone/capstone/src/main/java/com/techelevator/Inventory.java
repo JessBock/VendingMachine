@@ -48,5 +48,12 @@ public abstract class Inventory {
 
     public abstract String purchased();
 
+    public void decrementNumberRemaining() {
+        numberRemaining --;
+    }
+
+    public void incrementNumberPurchased() {
+        numberPurchased ++;
+    }
 
 }
