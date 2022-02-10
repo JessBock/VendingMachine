@@ -11,7 +11,7 @@ public abstract class Inventory {
 
     //constructor
 
-    public void Inventory(String name, BigDecimal price) {
+    public Inventory(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
     }
