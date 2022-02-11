@@ -2,7 +2,14 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -10,11 +17,14 @@ import java.util.TreeMap;
 public class VendingMachine {
     private BigDecimal balance = BigDecimal.valueOf(0.00);
     private Map<String, Inventory> inventoryMap = new TreeMap<>();
-
+    private final File LOG =  new File("C:\\Users\\Student\\workspace\\module-1-capstone-team-2\\19_20_Capstone\\capstone\\ExampleFiles\\Log.txt");
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss a");
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     //constructor
     public VendingMachine(String filePath) {
         File file = new File(filePath);
+
         if (file.exists()) {
             try (Scanner fileScanner = new Scanner(file);) {
                 while (fileScanner.hasNextLine()) {
@@ -54,10 +64,19 @@ public class VendingMachine {
         return inventoryMap;
     }
 
+    public File getLOG() {
+        return LOG;
+    }
+
     // methods
     public BigDecimal feedMoney(int moneyAdded) {
         balance = balance.add(BigDecimal.valueOf(moneyAdded));
-        System.out.println("Your remaining balance is $" + balance + ".");
+        System.out.println("Your remaining balance is $" + decimalFormat.format(balance) + ".");
+        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(LOG, true))) {
+            printWriter.println(LocalDateTime.now().format(dateTimeFormatter) + " FEED MONEY: $" + decimalFormat.format(BigDecimal.valueOf(moneyAdded)) + " $" + decimalFormat.format(balance));
+        } catch (FileNotFoundException ex) {
+            System.out.println("Log File Not Found.");
+        }
         return balance;
     }
 
@@ -72,7 +91,12 @@ public class VendingMachine {
         } else if (balance.compareTo(inventoryMap.get(key).getPrice()) < 0) {
             System.out.println("Please Add Additional Funds");
         }
-        System.out.println("Your remaining balance is $" + balance + " .");
+        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(LOG, true))) {
+            printWriter.println(LocalDateTime.now().format(dateTimeFormatter) + " PURCHASED - " + inventoryMap.get(key).getName() + ": $" + decimalFormat.format(inventoryMap.get(key).getPrice()) + " $" + decimalFormat.format(balance));
+        } catch (FileNotFoundException ex) {
+            System.out.println("Log File Not Found.");
+        }
+        System.out.println("Your remaining balance is $" + decimalFormat.format(balance) + " .");
     }
 
     public void finishTransaction() {
@@ -93,6 +117,11 @@ public class VendingMachine {
                 balance = balance.subtract(BigDecimal.valueOf(0.05));
             }
         }
-        System.out.println("$" + remainingBalance + " in " + quarter + " quarter(s), " + dime + " dime(s), and " + nickle + " nickle(s).");
+        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(LOG, true))) {
+            printWriter.println(LocalDateTime.now().format(dateTimeFormatter) + " GIVE CHANGE: $" + decimalFormat.format(remainingBalance) + " $" + decimalFormat.format(balance));
+        } catch (FileNotFoundException ex) {
+            System.out.println("Log File Not Found.");
+        }
+        System.out.println("$" + decimalFormat.format(remainingBalance) + " in " + quarter + " quarter(s), " + dime + " dime(s), and " + nickle + " nickle(s).");
     }
 }

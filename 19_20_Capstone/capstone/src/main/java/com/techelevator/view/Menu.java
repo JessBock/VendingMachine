@@ -9,6 +9,7 @@ public class Menu {
 
     private PrintWriter out;
     private Scanner in;
+    private String password = "GSC*";
 
     public Menu(InputStream input, OutputStream output) {
         this.out = new PrintWriter(output);
@@ -35,6 +36,11 @@ public class Menu {
         } catch (NumberFormatException e) {
             // eat the exception, an error message will be displayed below since choice will be null
         }
+
+        if (userInput.equals(password)) {
+            choice = password;
+        }
+
         if (choice == null) {
             out.println(System.lineSeparator() + "*** " + userInput + " is not a valid option ***" + System.lineSeparator());
         }
@@ -49,5 +55,9 @@ public class Menu {
         }
         out.print(System.lineSeparator() + "Please choose an option >>> ");
         out.flush();
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
