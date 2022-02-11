@@ -76,7 +76,6 @@ public class VendingMachineCLI {
             } else if (choice.equals(menu.getPassword())) {
                 while (true) {
                     String secretChoice = (String) menu.getChoiceFromOptions(SECRET_MENU_OPTIONS);
-                   // Scanner secretScanner = new Scanner(System.in);
                     if (secretChoice.equals(SECRET_MENU_AUDIT_LOG)) {
                         try (Scanner fieScanner = new Scanner(vendingMachine.getLOG())) {
                             while (fieScanner.hasNextLine()) {
@@ -87,12 +86,8 @@ public class VendingMachineCLI {
                             System.out.println("Audit Log File Not Found");
                         }
                     } else if (secretChoice.equals(SECRET_MENU_SALES_REPORT)) {
-                        BigDecimal totalSales = BigDecimal.ZERO;
-                        for (Map.Entry<String, Inventory> entry : vendingMachine.getInventoryMap().entrySet()) {
-                            System.out.println(entry.getValue().getName() + "|" + entry.getValue().getNumberPurchased());
-                            totalSales = totalSales.add((entry.getValue().getPrice()).multiply(BigDecimal.valueOf(entry.getValue().getNumberPurchased())));
-                        }
-                        System.out.println("\n**TOTAL SALES** $" + decimalFormat.format(totalSales));
+                        vendingMachine.printSalesReport();
+
                     } else if (secretChoice.equals(MAIN_MENU_OPTION_EXIT)) {
                         //exit
                         break;

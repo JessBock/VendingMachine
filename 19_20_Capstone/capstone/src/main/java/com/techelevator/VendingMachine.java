@@ -21,6 +21,7 @@ public class VendingMachine {
     private int quarter = 0;
     private int dime = 0;
     private int nickel = 0;
+    private BigDecimal totalSales;
 
     //constructor
     public VendingMachine(String filePath) {
@@ -81,6 +82,11 @@ public class VendingMachine {
         return nickel;
     }
 
+    public BigDecimal getTotalSales(){
+        return totalSales;
+    }
+
+
     // methods
     public BigDecimal feedMoney(int moneyAdded) {
         balance = balance.add(BigDecimal.valueOf(moneyAdded));
@@ -136,5 +142,14 @@ public class VendingMachine {
             System.out.println("Log File Not Found.");
         }
         System.out.println("$" + decimalFormat.format(remainingBalance) + " in " + quarter + " quarter(s), " + dime + " dime(s), and " + nickel + " nickel(s).");
+    }
+
+    public void printSalesReport(){
+        totalSales = BigDecimal.ZERO;
+        for (Map.Entry<String, Inventory> entry : inventoryMap.entrySet()) {
+            System.out.println(entry.getValue().getName() + "|" + entry.getValue().getNumberPurchased());
+            totalSales = totalSales.add((entry.getValue().getPrice()).multiply(BigDecimal.valueOf(entry.getValue().getNumberPurchased())));
+        }
+        System.out.println("\n**TOTAL SALES** $" + decimalFormat.format(totalSales));
     }
 }

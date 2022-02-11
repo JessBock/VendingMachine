@@ -64,4 +64,18 @@ public class VendingMachineTest {
         Assert.assertEquals(0, vendingMachine.getNickel());
 
     }
+
+    @Test
+    public void salesReport_Total_is_accurate() {
+
+        vendingMachine.feedMoney(20);
+        vendingMachine.selectProduct("B3");
+        vendingMachine.selectProduct("A1");
+        vendingMachine.selectProduct("D2");
+        vendingMachine.finishTransaction();
+        vendingMachine.printSalesReport();
+
+        Assert.assertEquals(new BigDecimal("5.50"), vendingMachine.getTotalSales());
+
+    }
 }
