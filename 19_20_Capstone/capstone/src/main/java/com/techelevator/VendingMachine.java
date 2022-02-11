@@ -5,9 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -20,6 +18,9 @@ public class VendingMachine {
     private final File LOG =  new File("C:\\Users\\Student\\workspace\\module-1-capstone-team-2\\19_20_Capstone\\capstone\\ExampleFiles\\Log.txt");
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss a");
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
+    private int quarter = 0;
+    private int dime = 0;
+    private int nickel = 0;
 
     //constructor
     public VendingMachine(String filePath) {
@@ -68,6 +69,18 @@ public class VendingMachine {
         return LOG;
     }
 
+    public int getQuarter(){
+        return quarter;
+    }
+
+    public int getDime(){
+        return dime;
+    }
+
+    public int getNickel(){
+        return nickel;
+    }
+
     // methods
     public BigDecimal feedMoney(int moneyAdded) {
         balance = balance.add(BigDecimal.valueOf(moneyAdded));
@@ -100,9 +113,9 @@ public class VendingMachine {
     }
 
     public void finishTransaction() {
-        int quarter = 0;
-        int dime = 0;
-        int nickle = 0;
+        quarter = 0;
+        dime = 0;
+        nickel = 0;
         BigDecimal remainingBalance = balance;
 
         while (balance.compareTo(BigDecimal.ZERO) > 0) {
@@ -113,7 +126,7 @@ public class VendingMachine {
                 dime++;
                 balance = balance.subtract(BigDecimal.valueOf(0.10));
             } else if (balance.compareTo(BigDecimal.valueOf(0.05)) >= 0) {
-                nickle++;
+                nickel++;
                 balance = balance.subtract(BigDecimal.valueOf(0.05));
             }
         }
@@ -122,6 +135,6 @@ public class VendingMachine {
         } catch (FileNotFoundException ex) {
             System.out.println("Log File Not Found.");
         }
-        System.out.println("$" + decimalFormat.format(remainingBalance) + " in " + quarter + " quarter(s), " + dime + " dime(s), and " + nickle + " nickle(s).");
+        System.out.println("$" + decimalFormat.format(remainingBalance) + " in " + quarter + " quarter(s), " + dime + " dime(s), and " + nickel + " nickel(s).");
     }
 }
