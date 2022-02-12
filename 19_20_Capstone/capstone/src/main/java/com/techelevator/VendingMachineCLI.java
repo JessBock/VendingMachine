@@ -2,6 +2,7 @@ package com.techelevator;
 
 import com.techelevator.view.Menu;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -77,13 +78,21 @@ public class VendingMachineCLI {
                 while (true) {
                     String secretChoice = (String) menu.getChoiceFromOptions(SECRET_MENU_OPTIONS);
                     if (secretChoice.equals(SECRET_MENU_AUDIT_LOG)) {
-                        try (Scanner fieScanner = new Scanner(vendingMachine.getLOG())) {
-                            while (fieScanner.hasNextLine()) {
-                                String line = fieScanner.nextLine();
-                                System.out.println(line);
+                        Scanner scanner = new Scanner(System.in);
+                        System.out.println("Please enter log date (MM-DD-YYYY)");
+                        String input = scanner.nextLine();
+
+                        String filePath = ("C:\\Users\\Student\\workspace\\module-1-capstone-team-2\\19_20_Capstone\\capstone\\ExampleFiles\\Log-" + input + ".txt");
+                        File logFile = new File(filePath);
+                        if (logFile.exists()) {
+                            try (Scanner fileScanner = new Scanner(logFile)) {
+                                while (fileScanner.hasNextLine()) {
+                                    String line = fileScanner.nextLine();
+                                    System.out.println(line);
+                                }
+                            } catch (FileNotFoundException ex) {
+                                System.out.println("Audit Log File Not Found");
                             }
-                        } catch (FileNotFoundException ex) {
-                            System.out.println("Audit Log File Not Found");
                         }
                     } else if (secretChoice.equals(SECRET_MENU_SALES_REPORT)) {
                         vendingMachine.printSalesReport();
