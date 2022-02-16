@@ -97,20 +97,23 @@ public class VendingMachine {
     }
 
     public void selectProduct(String key) {
-        if (inventoryMap.get(key).getNumberRemaining() > 0 && (balance.compareTo(inventoryMap.get(key).getPrice())) >= 0) {
-            balance = balance.subtract(inventoryMap.get(key).getPrice());
-            System.out.println(inventoryMap.get(key).purchased());
-            inventoryMap.get(key).decrementNumberRemaining();
-            inventoryMap.get(key).incrementNumberPurchased();
-        } else if (inventoryMap.get(key).getNumberRemaining() <= 0) {
-            System.out.println("Sold Out");
-        } else if (balance.compareTo(inventoryMap.get(key).getPrice()) < 0) {
-            System.out.println("Please Add Additional Funds");
+        if (inventoryMap.containsKey(key)) {
+            if (inventoryMap.get(key).getNumberRemaining() > 0 && (balance.compareTo(inventoryMap.get(key).getPrice())) >= 0) {
+                balance = balance.subtract(inventoryMap.get(key).getPrice());
+                System.out.println(inventoryMap.get(key).purchased());
+                inventoryMap.get(key).decrementNumberRemaining();
+                inventoryMap.get(key).incrementNumberPurchased();
+            } else if (inventoryMap.get(key).getNumberRemaining() <= 0) {
+                System.out.println("Sold Out");
+            } else if (balance.compareTo(inventoryMap.get(key).getPrice()) < 0) {
+                System.out.println("Please Add Additional Funds");
+            }
+            addToLog(LocalDateTime.now().format(dateTimeFormatter) + " PURCHASED - " + inventoryMap.get(key).getName() + ": $" + decimalFormat.format(inventoryMap.get(key).getPrice()) + " $" + decimalFormat.format(balance));
+        } else {
+            System.out.println("Key not found.");
         }
-        addToLog(LocalDateTime.now().format(dateTimeFormatter) + " PURCHASED - " + inventoryMap.get(key).getName() + ": $" + decimalFormat.format(inventoryMap.get(key).getPrice()) + " $" + decimalFormat.format(balance));
         System.out.println("Your remaining balance is $" + decimalFormat.format(balance) + " .");
     }
-
     public void finishTransaction() {
         quarter = 0;
         dime = 0;

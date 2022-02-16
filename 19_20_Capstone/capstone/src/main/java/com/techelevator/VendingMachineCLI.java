@@ -34,9 +34,8 @@ public class VendingMachineCLI {
     }
 
     public void run() {
+        VendingMachine vendingMachine = new VendingMachine(FILE_PATH);
         while (true) {
-            VendingMachine vendingMachine = new VendingMachine(FILE_PATH);
-
             String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
             if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
@@ -55,8 +54,12 @@ public class VendingMachineCLI {
 
                     if (subChoice.equals(SUB_MENU_OPTION_FEED_MONEY)) {
                         System.out.println("Enter Amount to Add:");
-                        int amountToAdd = Integer.parseInt(purchaseScanner.nextLine());
-                        vendingMachine.feedMoney(amountToAdd);
+                        try {
+                            int amountToAdd = Integer.parseInt(purchaseScanner.nextLine());
+                            vendingMachine.feedMoney(amountToAdd);
+                        } catch (Exception ex) {
+                            System.out.println("Invalid Entry");
+                        }
                     } else if (subChoice.equals(SUB_MENU_OPTION_SELECT_PRODUCT)) {
                         if (vendingMachine.getBalance().equals(BigDecimal.ZERO)) {
                             System.out.println("Please deposit money before making a selection.");
